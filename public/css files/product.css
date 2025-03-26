@@ -1,0 +1,33 @@
+body{
+    margin: 0;
+    }
+    .small-div{
+        margin-top: 20px;
+    }
+    .main-input-list{
+        margin-left: 10px;
+        margin-top: 20px;
+    }
+    .input-bar{
+        height: 30px;
+        border-radius: 10px;
+    }
+    .input-button{
+        height: 34px;
+        border: none;
+        background-color: gray;
+        border-radius: 10px;
+        width: 100px;
+    }
+    .input-button:active{
+        background-color: rgb(200, 200, 200);
+        transition: 0.3s;
+    }
+    .input-button:hover{
+        background-color: rgb(150, 150, 150);
+        transition: 0.3s;
+    }
+    .label-input{
+        margin-bottom: 20px;
+    }
+    

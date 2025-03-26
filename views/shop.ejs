@@ -1,0 +1,42 @@
+<%- include('includes/head.ejs')%>
+    <link rel="stylesheet" href="/css files/shop.css">
+</head>
+<body>
+    <%- include('includes/nav.ejs') %>
+    <main class="main-products">
+        <h1>products</h1>
+        <div class="all-products-div">
+            <%if (products.length > 0 ) { %>
+                <%products.forEach((prod) => { %>
+            <article>
+                <div class="product-div">
+                    <header class="product-name">
+                        <%=prod.title%>
+                    </header>
+                    <div class="product-image-div">
+                        <img class="product-image-inp" src="https://assets.blurb.com/pages/website-assets/lp-homepage/3_Tradebooks-922752db04177f3417c8505ff1970f9d88be19f966cff7ce4654bd85c5073ac3.png" alt="">
+                    </div>
+                    <div class="product-price-dis">
+                        <div class="product-price-div">
+                          <b> $19.99 </b> 
+                        </div>
+                        <div class="product-description-div">
+                            ho this is me and i like your cut g
+                        </div>
+                    </div>
+                    <div class="product-button-div">
+                        <button class="product-button">
+                            buy now
+                        </button>
+                    </div>
+                </div>
+            
+            </article>
+            <% }) %>
+            <% } else { %>
+                <h1>There are no products currently!</h1>
+                <% }%>
+    </main>
+ 
+</body>
+</html>

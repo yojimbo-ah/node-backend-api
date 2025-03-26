@@ -1,0 +1,25 @@
+.main-header{
+    background-color: gray;
+    padding-top:2px ;
+    padding-bottom: 2px;
+}
+.pages-div{
+    display: flex;
+}
+.pages-options a{
+    color: black;
+}
+.pages-options{
+    padding-right: 20px;
+}
+.pages-options a:hover{
+    color: rgb(50, 50, 50);
+    transition: 0.2s;
+}
+.pages-options a:active{
+    color: white;
+    transition: 0s;
+}
+.active-input a{
+    color: white;
+}

@@ -1,0 +1,10 @@
+extends layouts/main-layouts 
+block styles 
+    link(rel="stylesheet", href="/css files/product.css")
+block main 
+    main.main-input-list
+        form(action="/admin/product" , method="POST")
+            label.label-input(for="title") You can add your product from here :
+            div.small-div
+                input.input-bar(type="text" , name="title" , id="title")
+                button.input-button(type="submit") add product
