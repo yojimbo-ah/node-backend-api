@@ -13,9 +13,11 @@ const __filename = fileURLToPath(import.meta.url);  // Convert import.meta.url t
 const __dirname = dirname(__filename);
 
 // imoported middleware functions
-import { routerAdmin  , products} from './routes/admin.js' ;
+import { routerAdmin  } from './routes/admin.js' ;
 import { routerShop } from './routes/shop.js';
 
+// imported controller functions 
+import { error404 } from './controllers/error404.js';
 const app = express() ;
 app.listen(3000)
 
@@ -24,19 +26,13 @@ app.set('views' , 'views')
 
 
 app.use(bodyParser.urlencoded({extended : false})) ;
-
 app.use(express.static(path.join(__dirname , './public'))) ;
 
 // the router countains are middlewares :
 
 app.use('/admin' , routerAdmin ) ;
-
 app.use('/' , routerShop ) ;
-
-app.use('/' , ( req , res , next ) => {
-    console.log(__dirname);
-    res.status(404).render('notFound.ejs' , {title : 'error page' , path : ''})
-})
+app.use('/' , error404)
 
 
 
