@@ -1,5 +1,5 @@
-const products = [] ;
 
+import {addNewItemToProduct} from '../modules/product.js' 
 // functions of routes admin.js
 
 const productCHome = (req , res , next) => {
@@ -8,14 +8,17 @@ const productCHome = (req , res , next) => {
         , path : '/admin/home'}) ;
 }
 const prodcutCproduct = (req , res , next) =>{
-    products.push({title : req.body.title});
+    const product = new addNewItemToProduct(req.body.title)
+    product.addToProducts()
     res.redirect('/');
 }
 
 // functions of routes shop.js
 const productCSHop = (req , res , next) => {
-    console.log('your products : ' , products) ;
-    res.render('shop.ejs' , { products : products  , title : 'shop page' , path : '/'});
+    addNewItemToProduct.fetchAll((products)=>{
+        res.render('shop.ejs' , { products : products  , title : 'shop page' , path : '/'});
+    })
+    
 }
 
 // functions of notFound.js 

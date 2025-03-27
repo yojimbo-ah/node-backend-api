@@ -24,6 +24,7 @@ body{
         border-color: black;
         border: solid;
         background-color: rgb(234, 234, 234);
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
        
     }
     .product-image-inp{
