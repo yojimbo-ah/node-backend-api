@@ -1,5 +1,6 @@
 body{
     margin: 0;
+    margin-bottom: 20px;
     }
     .main-products{
         margin-left: 10px;
@@ -24,7 +25,7 @@ body{
         border-color: black;
         border: solid;
         background-color: rgb(234, 234, 234);
-        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
        
     }
     .product-image-inp{

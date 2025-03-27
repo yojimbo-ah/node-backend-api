@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs')%>
+<link rel="stylesheet" href="/css files/product.css">
+</head>
+<body>
+
+    <%- include('../includes/nav.ejs') %>
+
+    <main class="main-input-list">
+        <form action="/admin/product" method="POST">
+            <label class="label-input" for="title">You can add your product from here :</label>
+            <div class="small-div">
+                <input class="input-bar" type="text" name="title" id="title">
+                <button class="input-button" type="submit">add product</button>
+            </div>
+        </form>
+    </main>
+ 
+</body>
+</html>

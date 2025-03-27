@@ -6,11 +6,12 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);  
 const __dirname = dirname(__filename);
 
-import { productCSHop } from '../controllers/productsc.js';
+import { client } from '../controllers/client.js';
 
 
 const routerShop = express.Router() ;
 
-routerShop.get('/' , productCSHop )
+routerShop.get('/' , client.productCSHop );
+routerShop.get('/cart' , client.clientCart) ;
 
 export { routerShop };

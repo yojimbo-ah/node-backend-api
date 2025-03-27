@@ -1,6 +1,16 @@
 <header class="main-header">
     <ul class="pages-div">
-        <li class="<%= path === '/' ? 'active-input' : '' %> pages-options"><a href="/">shop</a></li>
-        <li class="<%= path === '/admin/home' ? 'active-input' : '' %> pages-options"><a href="/admin/home">add product</a></li>
+        <li class="<%= path === '/' ? 'active-input' : '' %> pages-options">
+            <a href="/">shop</a>
+        </li>
+        <li class="<%= path === '/cart' ? 'active-input' : '' %> pages-options">
+            <a href="/cart">cart</a>
+        </li>
+        <li class="<%= path === '/admin/products-view' ? 'active-input' : '' %> pages-options">
+            <a href="/admin/products-view">admin products</a>
+        </li>
+        <li class="<%= path === '/admin/home' ? 'active-input' : '' %> pages-options">
+            <a href="/admin/home">admin add</a>
+        </li>
     </ul>
 </header>
