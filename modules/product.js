@@ -24,11 +24,27 @@ const addNewItemToProduct = class product {
                 if (!err) {
                     products = JSON.parse(fileContent) ;
                 }
-                this.id = Math.random().toString() ;
-                products.push(this)
-                fs.writeFile(p , JSON.stringify(products) ,(err) => {
+                if (!(this.id)) {
+                    this.id = Math.random().toString() ;
+                    products.push(this)
+                    fs.writeFile(p , JSON.stringify(products) ,(err) => {
                     console.log(err) ;
                 } );
+                } else {
+                    addNewItemToProduct.fetchAll(products => {
+                        const temp = products.find(element => {
+                            return element.id === this.id ;
+                        })
+                        temp.title = this.title ;
+                        temp.price = this.price ;
+                        temp.description = this.description ;
+                        temp.image = this.image ;
+                        fs.writeFile(p , JSON.stringify(products) , (err) =>{
+                            console.log(err);
+                        })
+
+                    })
+                }
             })
         }
         static fetchAll(cb) {
@@ -59,9 +75,6 @@ const addNewItemToProduct = class product {
                 })
                 cb(p);
         }) 
-    }
-    static edit (ID , cb) {
-
     }
 }
 
