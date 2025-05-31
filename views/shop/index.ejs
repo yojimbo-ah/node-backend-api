@@ -1,10 +1,5 @@
 <%- include('../includes/head.ejs')%>
     <link rel="stylesheet" href="/css files/shop.css">
-    <style>
-        .button-forms{
-            display: inline-block;
-        }
-    </style>
 </head>
 <body>
     <%- include('../includes/nav.ejs') %>
@@ -12,34 +7,25 @@
         <h1>products</h1>
         <div class="all-products-div">
             <%if (products.length > 0 ) { %>
-                <%products.forEach((prod) => { %>
+                <%products.forEach((product) => { %>
             <article>
                 <div class="product-div">
                     <header class="product-name">
-                        <%=prod.title%>
+                        <%=product.title%>
                     </header>
                     <div class="product-image-div">
-                        <img class="product-image-inp" src="<%=prod.image%>" alt="">
+                        <img class="product-image-inp" src="<%=product.image%>" alt="">
                     </div>
                     <div class="product-price-dis">
                         <div class="product-price-div">
-                          <b> $<%=prod.price%> </b> 
+                          <b> $<%=product.price%> </b> 
                         </div>
                         <div class="product-description-div">
-                            <%=prod.description%>
+                            <%=product.description%>
                         </div>
                     </div>
                     <div class="product-button-div">
-                        <form action="/admin/edit-product/<%= prod.id %>" class="button-forms">
-                            <button type="submit" class="product-button">
-                                edit 
-                            </button>
-                        </form>
-                        <form action="/admin/delete-product/<%= prod.id %>"  class="button-forms">
-                            <button type="submit" class="product-button">
-                                delete
-                            </button>
-                        </form>
+                        <%- include('../includes/add-product-to-cart.ejs' , {product : product})%>
                     </div>
                 </div>
             

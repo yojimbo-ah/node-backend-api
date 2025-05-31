@@ -6,12 +6,35 @@
     <%- include('../includes/nav.ejs') %>
 
     <main class="main-input-list">
+        <h2>
+            You can add your product from here :
+        </h2>
         <form action="/admin/product" method="POST">
-            <label class="label-input" for="title">You can add your product from here :</label>
             <div class="small-div">
+                <label class="label-input" for="title">
+                    Title :
+                </label>
                 <input class="input-bar" type="text" name="title" id="title">
-                <button class="input-button" type="submit">add product</button>
             </div>
+            <div class="small-div">
+                <label class="label-input" for="image" name="image">
+                    Add image url :
+                </label>
+                <input class="input-bar" type="text" name="image" id="image">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="price" name="price">
+                    add product price :
+                </label>
+                <input class="input-bar" type="number" step="0.01" name="price" id="price">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="description" name="description">
+                    Add product description :
+                </label>
+                <input class="input-bar" type="text" name="description" id="description">
+            </div>
+            <button class="input-button" type="submit">add product</button>
         </form>
     </main>
  

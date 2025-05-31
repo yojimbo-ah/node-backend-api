@@ -7,18 +7,33 @@ const productCHome = (req , res , next) => {
         , title : 'product page' 
         , path : '/admin/home'}) ;
 }
-const prodcutCproduct = (req , res , next) =>{
-    const product = new addNewItemToProduct(req.body.title)
+const productCproduct = (req , res , next) =>{
+    const reqB = req.body ;
+    const product = new addNewItemToProduct(reqB.title , reqB.image , reqB.price , reqB.description)
     product.addToProducts()
-    res.redirect('/');
+    res.redirect('/admin/home');
 }
 
 const adminProductsView = (req , res , next) => {
-    res.render('admin/products-view.ejs' , {title : 'admin view' , path : '/admin/products-view'})
+    addNewItemToProduct.fetchAll((products)=>{
+        res.render('admin/products-view.ejs' , { products : products  , title : 'admin view' , path : '/admin/products-view'});
+    })
+}
+const adminProductEdit = (req , res , next) =>{
+    const ID = req.params.productId ;
+    addNewItemToProduct.delete(ID);
+    res.render('admin/edit-product' , {products : products  , title : 'admin edit' , path : '/admin/edit-product'})
+}  
+
+const adminProductDelete = (req , res , next) => {
+    const ID = req.params.productId ;
+    
+    res.redirect('/admin/products-view');
 }
 
 
-const admin = {productCHome , prodcutCproduct , adminProductsView} ;
+const admin = {productCHome , productCproduct 
+    , adminProductsView , adminProductEdit , adminProductDelete } ;
 
 
 export  { admin }

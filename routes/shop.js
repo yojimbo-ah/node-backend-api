@@ -11,7 +11,13 @@ import { client } from '../controllers/client.js';
 
 const routerShop = express.Router() ;
 
-routerShop.get('/' , client.productCSHop );
-routerShop.get('/cart' , client.clientCart) ;
+routerShop.get('/' , client.clientIndex );
+routerShop.get('/cart' , client.clientCartGet) ;
+routerShop.post('/cart' , client.clientCartPost) ;
+routerShop.get('/product-detail' , client.clientProductView) ;
+routerShop.get('/shop' , client.productCSHop);
+routerShop.get('/checkout' , client.clientCheckout);
+routerShop.get('/orders' , client.clientOrders) ;
+routerShop.get('/product-details/:productId' , client.prodcutDetails) ;
 
 export { routerShop };

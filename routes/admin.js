@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { title } from 'process';
 
+import {addNewItemToProduct} from '../modules/product.js';
 // controller import 
 import {admin} from '../controllers/admin-products.js';
 
@@ -15,7 +16,9 @@ const __dirname = dirname(__filename);
 const routerAdmin = express.Router() ;
 routerAdmin.get('/products-view' ,admin.adminProductsView) ;
 routerAdmin.get('/home' , admin.productCHome) ;
-routerAdmin.post('/product' ,admin.prodcutCproduct ) ;
+routerAdmin.get('/edit-product/:productId', admin.adminProductEdit);
+routerAdmin.post('/product' ,admin.productCproduct ) ;
+routerAdmin.get('/delete-product/:productId' , admin.adminProductDelete);
 
 
 export { routerAdmin };

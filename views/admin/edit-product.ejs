@@ -1,11 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<%- include('../includes/head.ejs')%>
+<link rel="stylesheet" href="/css files/product.css">
 </head>
 <body>
-    <h1>admin product edit</h1>
+
+    <%- include('../includes/nav.ejs') %>
+
+    <main class="main-input-list">
+        <h2>
+            You can edit your product from here :
+        </h2>
+        <form action="/admin/product" method="POST">
+            <div class="small-div">
+                <label class="label-input" for="title">
+                    Title : 
+                </label>
+                <input class="input-bar" type="text" name="title" id="title" value="<%= product.title%>">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="image" name="image">
+                    Add image url : 
+                </label>
+                <input class="input-bar" type="text" name="image" id="image" value="<%= product.image %>">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="price" name="price">
+                    add product price : 
+                </label>
+                <input class="input-bar" type="number" step="0.01" name="price" id="price" value="<%= product.price%>">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="description" name="description">
+                    Add product description : 
+                </label>
+                <input class="input-bar" type="text" name="description" id="description" value="<%= product.description %>">
+            </div>
+            <button class="input-button" type="submit">edit product</button>
+        </form>
+    </main>
+ 
 </body>
 </html>
