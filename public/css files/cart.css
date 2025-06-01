@@ -1,0 +1,18 @@
+.main-div{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 7fr  2fr;
+    gap: 30px;
+}
+.main-div-pay{
+    border: solid;
+
+}
+.main-div-cart-items{
+    border: solid;
+    display: flex;
+    flex-direction: row;
+}
+.items-div{
+
+}

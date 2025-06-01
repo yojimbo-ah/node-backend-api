@@ -1,4 +1,5 @@
 import {addNewItemToProduct} from '../modules/product.js' 
+import { cartItems } from '../modules/cart.js'
 
 const productCSHop = (req , res , next) => {
     addNewItemToProduct.fetchAll((products)=>{
@@ -7,13 +8,16 @@ const productCSHop = (req , res , next) => {
 }
 
 const clientCartGet = (req , res , next) => {
-    res.render('shop/cart.ejs' , {title : 'cart' , path : '/cart'}) ;
+    cartItems.fetchAll(cart => {
+        res.render('shop/cart.ejs' , {cart : cart , path : '/cart' , title : 'cart'}) ;
+    })
 }
 
 const clientCartPost = (req , res , next) => {
-    const reqId = req.body.productId ;
+    const reqId = req.params.productId ;
     console.log(reqId);
-    res.redirect('/cart');
+    cartItems.addToCart(reqId);
+    res.redirect('/cart'); 
 }
 
 const clientProductView = (req , res , next) => {

@@ -13,7 +13,7 @@ const routerShop = express.Router() ;
 
 routerShop.get('/' , client.clientIndex );
 routerShop.get('/cart' , client.clientCartGet) ;
-routerShop.post('/cart' , client.clientCartPost) ;
+routerShop.post('/shop/buy/:productId' , client.clientCartPost) ;
 routerShop.get('/product-detail' , client.clientProductView) ;
 routerShop.get('/shop' , client.productCSHop);
 routerShop.get('/checkout' , client.clientCheckout);

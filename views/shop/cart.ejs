@@ -1,10 +1,30 @@
-<%- include('../includes/head.ejs')%>
 
+<%- include('../includes/head.ejs')%>
+<link rel="stylesheet" href="/css files/cart.css">
 </head>
 <%- include('../includes/nav.ejs')%>
+<% if (cart.products.length === 0) { %>
+
+    <h1>
+        the cart is empty for now 
+    </h1>
+
+<% } else { %>
+    <div class="main-div">
+        <div class="main-div-cart-items">
+            <% cart.products.forEach(elem => { %>
+                <div class="items-div">
+
+                </div>
+            <% })} %>
+        </div>
+        <div class="main-div-pay">
+            <h1>
+                part where there would be the confomation and also the buying details
+            </h1>
+        </div>
+    </div>
 
 
-<h1>
-    this is the cart for now
-</h1>
+
 </html>
