@@ -1,5 +1,6 @@
+import {Product} from '../modules/product.js'
 
-import {addNewItemToProduct} from '../modules/product.js' 
+
 // functions of routes admin.js
 
 const productCHome = (req , res , next) => {
@@ -7,38 +8,77 @@ const productCHome = (req , res , next) => {
         , title : 'product page' 
         , path : '/admin/home'}) ;
 }
+
 const productCproduct = (req , res , next) =>{
     const reqB = req.body ;
-    const product = new addNewItemToProduct(reqB.title , reqB.image , reqB.price , reqB.description , null) ;
-    product.addToProducts()
-    res.redirect('/admin/home');
+    Product.create({name : reqB.title , description : reqB.description 
+    , price : reqB.price , image : reqB.image })
+    .then(result => {
+        console.log(result) ;
+        res.redirect('/admin/home');
+    })
+    .catch(err => {
+        console.log(err) ;
+        res.status(500).send('Failed to add product');
+    })
+
 }
 
 const adminProductsView = (req , res , next) => {
-    addNewItemToProduct.fetchAll((products)=>{
-        res.render('admin/products-view.ejs' , { products : products  , title : 'admin view' , path : '/admin/products-view'});
+    Product.findAll()
+    .then(products => {
+    res.render('admin/products-view.ejs' 
+    , { products : products  , title : 'admin view' , path : '/admin/products-view'});
+
+    })
+    .catch(err => {
+        console.log(err) ;
+        res.status(500).send('Failed to open the page');
     })
 }
 const adminProductEdit = (req , res , next) =>{
     const ID = req.params.productId ;
-    addNewItemToProduct.findById(ID , product => {
-    res.render('admin/edit-product.ejs' , {product : product , title : 'hello' , path : 'wawa'})
+    Product.findByPk(ID)
+    .then(product => {
+        res.render('admin/edit-product.ejs' , {product : product , title : 'hello' , path : 'wawa'}) ;
+    }).catch(err => {
+        console.log(err) ;
     })
 
 }  
 const adminProductEdit2 = (req , res , next) => {
     const reqB = req.body ;
     const productId = req.params.productId ;
-    console.log(productId);
-    const product = new addNewItemToProduct(reqB.title , reqB.image , reqB.price , reqB.description , productId);
-    product.addToProducts()
+    Product.update(
+        {
+            name : reqB.title ,
+            image : reqB.image ,
+            description : reqB.description ,
+            price : reqB.price
+        },
+        {
+            where : {
+            id : productId
+            }
+        }
+    )
+
     res.redirect('../../home');
 }
 
 const adminProductDelete = (req , res , next) => {
     const ID = req.params.productId ;
-    addNewItemToProduct.delete(ID);
-    res.redirect('/admin/products-view');
+    Product.destroy({
+        where : {
+            id : ID
+        } 
+    }).then( () => {
+         res.redirect('/admin/products-view');
+        }
+    ).catch(err => {
+        console.log(err);
+    })
+
 }
 
 

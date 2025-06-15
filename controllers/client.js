@@ -1,5 +1,4 @@
-import {addNewItemToProduct} from '../modules/product.js' 
-import { cartItems } from '../modules/cart.js'
+/*
 
 const productCSHop = (req , res , next) => {
     addNewItemToProduct.fetchAll((products)=>{
@@ -50,3 +49,4 @@ const client = {productCSHop , clientCartGet , clientCartPost
     , clientOrders , prodcutDetails} ;
 
 export { client }
+*/

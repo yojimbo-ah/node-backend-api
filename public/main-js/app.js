@@ -5,6 +5,9 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser' ;
 import path from 'path' ;
 
+import { Product } from '../../modules/product.js';
+import sequelize from '../../utils/database.js';
+
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -19,7 +22,13 @@ import { routerShop } from '../../routes/shop.js';
 // imported controller functions 
 import { error404 } from '../../controllers/error404.js';
 const app = express() ;
-app.listen(3000)
+sequelize.sync().then(result => {
+    console.log(result) ;
+    app.listen(3000) ;
+
+}).catch(err => {
+    console.log(err) ;
+})
 
 app.set('view engine' , 'ejs');
 app.set('views' , 'views')
