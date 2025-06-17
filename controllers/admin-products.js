@@ -11,21 +11,25 @@ const productCHome = (req , res , next) => {
 
 const productCproduct = (req , res , next) =>{
     const reqB = req.body ;
-    Product.create({name : reqB.title , description : reqB.description 
-    , price : reqB.price , image : reqB.image })
-    .then(result => {
-        console.log(result) ;
+    req.user.createProduct({
+        image : reqB.image ,
+        description : reqB.description ,
+        price : reqB.price , 
+        name : reqB.title 
+   })
+   .then(result => {
         res.redirect('/admin/home');
-    })
-    .catch(err => {
+        console.log(result)
+   })
+   .catch(err => {
         console.log(err) ;
         res.status(500).send('Failed to add product');
-    })
-
+   })
 }
 
 const adminProductsView = (req , res , next) => {
-    Product.findAll()
+
+    req.user.getProducts()
     .then(products => {
     res.render('admin/products-view.ejs' 
     , { products : products  , title : 'admin view' , path : '/admin/products-view'});
@@ -38,9 +42,10 @@ const adminProductsView = (req , res , next) => {
 }
 const adminProductEdit = (req , res , next) =>{
     const ID = req.params.productId ;
-    Product.findByPk(ID)
+    req.user.getProducts({where : {id : ID}})
     .then(product => {
-        res.render('admin/edit-product.ejs' , {product : product , title : 'hello' , path : 'wawa'}) ;
+        console.log(product)
+        res.render('admin/edit-product.ejs' , {product : product[0] , title : 'hello' , path : 'wawa'}) ;
     }).catch(err => {
         console.log(err) ;
     })

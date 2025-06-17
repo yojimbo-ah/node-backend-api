@@ -1,8 +1,11 @@
-/*
+import { Product } from "../modules/product.js";
 
 const productCSHop = (req , res , next) => {
-    addNewItemToProduct.fetchAll((products)=>{
+    Product.findAll()
+    .then(products => {
         res.render('shop/shop.ejs' , { products : products  , title : 'shop page' , path : '/shop'});
+    }).catch(err => {
+        console.log(err)
     })
 }
 
@@ -24,8 +27,12 @@ const clientProductView = (req , res , next) => {
 }
 
 const clientIndex = (req , res , next) => {
-    addNewItemToProduct.fetchAll((products)=>{
+    Product.findAll()
+    .then(products => {
         res.render('shop/index.ejs' , { products : products  , title : 'index page' , path : '/index'});
+    })
+    .catch(err => {
+        console.log(err)
     })
 }
 
@@ -37,11 +44,13 @@ const clientOrders = (req , res , next) => {
 }
 const prodcutDetails = (req , res , next) => {
     const productId = req.params.productId ;
-    addNewItemToProduct.findById(productId , (product) => {
-        console.log(product) ;
+    Product.findByPk(productId)
+    .then(product => {
         res.render('shop/product-detail.ejs' , {title : 'product details' , path : '/prodcut-detail' , product : product}) ;
-
-    } )
+    })
+    .catch(err => {
+        console.log(err) ;
+    })
 }
 
 const client = {productCSHop , clientCartGet , clientCartPost  
@@ -49,4 +58,4 @@ const client = {productCSHop , clientCartGet , clientCartPost
     , clientOrders , prodcutDetails} ;
 
 export { client }
-*/
+
