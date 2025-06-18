@@ -31,11 +31,17 @@ const app = express() ;
 
 // realations and associations :
 // user has many products and product has one user :
-Product.belongsTo(User , {constraints : true , onDelete : 'CASCADE'}) ;
-User.hasMany(Product);
+Product.belongsTo(User , {constraints : true , onDelete : 'CASCADE' }) ;
+User.hasMany(Product , {constraints : true , onDelete : 'CASCADE' });
+
 //user has one cart and cart has many items :
+
 User.hasOne(Cart) ;
 Cart.belongsTo(User) ;
+// cart has many items and many items are in cart :
+
+Cart.belongsToMany(Product , {through : CartItem});
+Product.belongsToMany(Cart , {through : CartItem})
 
 
 
@@ -45,8 +51,23 @@ sequelize.sync()
     User.findByPk(1)
     .then(user => {
         if (!user) {
-            User.create({name : 'ahmed' , age : 19 , email : 'abbad.ahmed.gg@gmail.com'})
+            return User.create({name : 'ahmed' , age : 19 , email : 'abbad.ahmed.gg@gmail.com'})
         }
+        return user
+    })
+    .then(user => {
+        user.getCart()
+        .then(carts => {
+            if(carts === null) {
+                user.createCart()
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    })
+    .catch(err => {
+        console.log(err)
     })
 
     app.listen(3000) ;

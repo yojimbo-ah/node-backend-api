@@ -11,8 +11,11 @@
 .main-div-cart-items{
     border: solid;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 .items-div{
-
+    display: inline-block;
+    background-color: pink;
+    border: solid;
+    border-color: cyan;
 }

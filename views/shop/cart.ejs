@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/css files/cart.css">
 </head>
 <%- include('../includes/nav.ejs')%>
-<% if (cart.products.length === 0) { %>
+<% if (cart.length === 0) { %>
 
     <h1>
         the cart is empty for now 
@@ -12,9 +12,22 @@
 <% } else { %>
     <div class="main-div">
         <div class="main-div-cart-items">
-            <% cart.products.forEach(elem => { %>
+            <% cart.forEach(elem => { %>
                 <div class="items-div">
-
+                    <p>
+                        name : <%-elem.name %>
+                    </p>
+                    <p>
+                        price : <%-elem.price %>
+                    </p>
+                    <p>
+                        qunatity : <%-elem.cartItem.quantity %>
+                    </p>
+                    <form action="/cart/delete/<%-elem.id%>" method="POST">
+                        <button type="submit">
+                            delete
+                        </button>
+                    </form>
                 </div>
             <% })} %>
         </div>

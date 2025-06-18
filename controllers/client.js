@@ -10,16 +10,54 @@ const productCSHop = (req , res , next) => {
 }
 
 const clientCartGet = (req , res , next) => {
-    cartItems.fetchAll(cart => {
-        res.render('shop/cart.ejs' , {cart : cart , path : '/cart' , title : 'cart'}) ;
+    req.user.getCart()
+    .then(cart => {
+        cart.getProducts()
+        .then(products => {
+            console.log(products);
+            res.render('shop/cart.ejs' , {cart : products , path : '/cart' , title : 'cart'}) ;
+        })
+        .catch(err => {
+            console.log(err);
+        })
     })
+    .catch(err => {
+        console.log(err) ;
+    })
+
 }
 
 const clientCartPost = (req , res , next) => {
     const reqId = req.params.productId ;
-    console.log(reqId);
-    cartItems.addToCart(reqId);
-    res.redirect('/cart'); 
+    req.user.getCart()
+    .then(cart => {
+        cart.getProducts({where : {id : reqId}})
+        .then(products => {
+            console.log(products) ;
+            if (products.length === 0) {
+                Product.findByPk(reqId)
+                .then(product => {
+                    cart.addProduct(product , {through : { quantity : 1 }});
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            } else {
+                let product = products[0] ;
+                product.cartItem.quantity ++ ;
+                product.cartItem.save()
+                .then(()=> {
+                    res.redirect('/cart');
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
 }
 
 const clientProductView = (req , res , next) => {
@@ -52,10 +90,30 @@ const prodcutDetails = (req , res , next) => {
         console.log(err) ;
     })
 }
+const clientProductCartDelete = (req , res , next) => {
+    const deleteId = req.params.ID ;
+    console.log('delete iddddd :' ,  deleteId);
+    req.user.getCart()
+    .then(cart => {
+        cart.getProducts({where : {id : deleteId}})
+        .then(products => {
+            let product = products[0] ;
+            product.cartItem.destroy()
+            .then(() => {
+                res.redirect('/cart') ;
+            })
+        })
+    })
+
+    .catch(err => {
+        console.log(err)
+    })
+
+}
 
 const client = {productCSHop , clientCartGet , clientCartPost  
     , clientProductView , clientIndex , clientCheckout 
-    , clientOrders , prodcutDetails} ;
+    , clientOrders , prodcutDetails , clientProductCartDelete} ;
 
 export { client }
 
