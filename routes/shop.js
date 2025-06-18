@@ -16,9 +16,9 @@ routerShop.get('/cart' , client.clientCartGet) ;
 routerShop.post('/shop/buy/:productId' , client.clientCartPost) ;
 routerShop.get('/product-detail' , client.clientProductView) ;
 routerShop.get('/shop' , client.productCSHop);
-routerShop.get('/checkout' , client.clientCheckout);
 routerShop.get('/orders' , client.clientOrders) ;
 routerShop.get('/product-details/:productId' , client.prodcutDetails) ;
 routerShop.post('/cart/delete/:ID' , client.clientProductCartDelete)
+routerShop.post('/order/check' , client.createOrder)
 
 export { routerShop };

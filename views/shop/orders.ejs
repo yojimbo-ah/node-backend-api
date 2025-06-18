@@ -1,10 +1,19 @@
-<%- include('../includes/head.ejs')%>
+<%- include('../includes/head.ejs') %>
 </head>
 <body>
-    <%- include('../includes/nav.ejs')%>
+  <%- include('../includes/nav.ejs') %>
 
-    <h1>
-        this is the orders for now
-    </h1>
+  <% if (orders.length === 0) { %>
+    <h1>No orders found.</h1>
+  <% } else { %>
+    <% orders.forEach(order => { %>
+      <h2>Order ID: <%= order.id %></h2>
+      <% order.products.forEach(product => { %>
+        <p><%= product.name %>: <%= product.orderItem.quantity %></p>
+      <% }) %>
+    <% }) %>
+  <% } %>
+
 </body>
+</html>
 

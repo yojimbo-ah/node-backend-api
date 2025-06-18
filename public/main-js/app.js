@@ -22,6 +22,8 @@ import { Product } from '../../modules/product.js';
 import { User } from '../../modules/user.js';
 import { CartItem } from '../../modules/cart-item.js';
 import { Cart } from '../../modules/cart.js';
+import { Order } from '../../modules/order.js';
+import { OrderItem} from '../../modules/order-item.js'
 
 // imported controller functions 
 import { error404 } from '../../controllers/error404.js';
@@ -43,7 +45,13 @@ Cart.belongsTo(User) ;
 Cart.belongsToMany(Product , {through : CartItem});
 Product.belongsToMany(Cart , {through : CartItem})
 
+// user can have many orders but order can belong to one user
+Order.belongsTo(User , {constraints : true , onDelete : 'CASCADE'});
+User.hasMany(Order , {constraints : true  , onDelete : 'CASCADE'});
 
+// same product can belong to diffrent orders and orders can have many products
+Order.belongsToMany(Product , {through : OrderItem});
+Product.belongsToMany(Order , {through : OrderItem});
 
 
 sequelize.sync()

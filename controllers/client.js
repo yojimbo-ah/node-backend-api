@@ -1,4 +1,6 @@
 import { Product } from "../modules/product.js";
+import { Order } from "../modules/order.js";
+import { Cart } from "../modules/cart.js";
 
 const productCSHop = (req , res , next) => {
     Product.findAll()
@@ -15,7 +17,7 @@ const clientCartGet = (req , res , next) => {
         cart.getProducts()
         .then(products => {
             console.log(products);
-            res.render('shop/cart.ejs' , {cart : products , path : '/cart' , title : 'cart'}) ;
+            res.render('shop/cart.ejs' , {cart : products , path : '/cart' , title : 'cart' , id : req.user.id}) ;
         })
         .catch(err => {
             console.log(err);
@@ -74,11 +76,14 @@ const clientIndex = (req , res , next) => {
     })
 }
 
-const clientCheckout = (req , res , next) => {
-    res.render('shop/checkout.ejs' , {title : 'checkout page' , path : '/checkout'})
-}
 const clientOrders = (req , res , next) => {
-    res.render('shop/orders.ejs' , {title : 'orders page' , path : '/orders'}) ;
+    req.user.getOrders({include : ['products']})
+    .then(orders => {
+        res.render('shop/orders.ejs' , {title : 'orders page' , path : '/orders' , orders : orders}) ;
+    })
+    .catch(err => {
+        console.log(err)
+    })
 }
 const prodcutDetails = (req , res , next) => {
     const productId = req.params.productId ;
@@ -111,9 +116,39 @@ const clientProductCartDelete = (req , res , next) => {
 
 }
 
+const createOrder = (req , res , next) => {
+    let fetchedCart
+    req.user.getCart()
+    .then(cart => {
+        fetchedCart = cart ;
+        return cart.getProducts()
+    })
+    .then(products => {
+        req.user.createOrder()
+        .then(order => {
+            return order.addProducts(products.map(product => {
+                product.orderItem = {quantity : product.cartItem.quantity }
+                return product ;
+            }))
+        })
+        .then(() => {
+            return fetchedCart.setProducts(null);
+        })
+        .then(result => {
+            res.redirect('/cart')
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 const client = {productCSHop , clientCartGet , clientCartPost  
-    , clientProductView , clientIndex , clientCheckout 
-    , clientOrders , prodcutDetails , clientProductCartDelete} ;
+    , clientProductView , clientIndex , clientOrders ,
+     prodcutDetails , clientProductCartDelete , createOrder} ;
 
 export { client }
 
