@@ -22,7 +22,7 @@
             <article>
                 <div class="product-div">
                     <header class="product-name">
-                        <%=product.title%>
+                        <%=product.name%>
                     </header>
                     <div class="product-image-div">
                         <img class="product-image-inp" src="<%=product.image%>" alt="">
@@ -37,7 +37,7 @@
                     </div>
                     <div class="product-button-div">
                         <%- include('../includes/add-product-to-cart.ejs' , {product : product})%>
-                        <form action="/product-details/<%=product.id %>" class="button-forms">
+                        <form action="/product-details/<%=product._id %>" class="button-forms">
                             <button class="product-button" type="submit">
                                 details
                             </button>

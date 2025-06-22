@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="/css files/cart.css">
 </head>
 <%- include('../includes/nav.ejs')%>
-<% if (cart.length === 0) { %>
+<% if (cart.products.length === 0) { %>
 
     <h1>
         the cart is empty for now 
@@ -12,35 +12,39 @@
 <% } else { %>
     <div class="main-div">
         <div class="main-div-cart-items">
-            <% cart.forEach(elem => { %>
+            <% cart.products.forEach(elem => { %>
                 <div class="items-div">
                     <p>
                         name : <%-elem.name %>
                     </p>
                     <p>
-                        price : <%-elem.price %>
+                        price : $ <%-elem.price %>
                     </p>
                     <p>
-                        qunatity : <%-elem.cartItem.quantity %>
+                        qunatity : <%-elem.quantity %>
                     </p>
-                    <form action="/cart/delete/<%-elem.id%>" method="POST">
+                    <form action="/cart/delete/<%-elem._id%>" method="POST">
                         <button type="submit">
                             delete
                         </button>
                     </form>
                 </div>
-            <% })} %>
+            <% }) %>
         </div>
         <div class="main-div-pay">
             <h1>
                 part where there would be the confomation and also the buying details
             </h1>
+            <p>
+                total price : $ <%= cart.totalPrice %>
+            </p>
             <form action="/order/check" method="POST">
                 <button type="submit">
                     add order
                 </button>
             </form>
         </div>
+        <%}%>
     </div>
 
 

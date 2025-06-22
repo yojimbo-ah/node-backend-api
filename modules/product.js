@@ -1,31 +1,61 @@
-import sequelize from "../utils/database.js";
-import { DataTypes , Sequelize } from "sequelize";
+import { connectToDatabase , getdb } from "../utils/database.js"
+import { ObjectId } from "mongodb";
 
-const Product = sequelize.define('product' , {
-    id : { 
-    type : DataTypes.INTEGER ,
-    autoIncrement : true ,
-    primaryKey : true ,
-    allowNull : false  ,
-    unique : true
-    } ,
-    name : {
-        type : DataTypes.STRING(255) ,
-        allowNull : false 
-    } ,
-    price : {
-        type : DataTypes.DECIMAL(8,2) ,
-        allowNull : false 
-    } , 
-    description : {
-        type : DataTypes.TEXT ,
-        allowNull : false ,
-    } , 
-    image : {
-        type : DataTypes.TEXT ,
-        allowNull : true 
+
+class Product {
+    constructor(name , description , price , image , userId) {
+        this.name = name ;
+        this.description = description ;
+        this.price = price ; 
+        this.image = image ;
+        this.userId = userId ;
     }
-})
 
+    save() {
+        const db = getdb() ;
+        return db.collection('products').insertOne(this)
+        .then(result => {
+            console.log(result)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+    static fetchAll () {
+        const db = getdb() ;
+        return db.collection('products').find().toArray()
+        .then(products => {
+            console.log(products) ;
+            return products ;
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
-export { Product }
+    static findById (productId) {
+        const db = getdb() ;
+        return db.collection('products')
+        .findOne({_id : new ObjectId(productId)})
+        .then(product => {
+            return product ;
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    static delete (productId) {
+        let db = getdb() ;
+        return db.collection('products')
+        .deleteOne({_id : new ObjectId(productId)})
+    }
+    static update(productId , options) {
+        let db = getdb() ;
+        return db.collection('products')
+        .updateOne({_id : new ObjectId(productId) },{ $set : 
+            {name : options.name , price : options.price ,
+            image : options.image , description : options.description}})
+    }
+}
+export {Product}

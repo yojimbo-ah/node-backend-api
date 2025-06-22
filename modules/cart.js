@@ -1,5 +1,4 @@
-import sequelize from "../utils/database.js";
-import { Sequelize , DataTypes } from "sequelize";
+
 
 const Cart = sequelize.define('cart' , {
     id : {

@@ -14,13 +14,10 @@ const __dirname = dirname(__filename);
 
 const routerAdmin = express.Router() ;
 
-routerAdmin.post('/product' ,admin.productCproduct ) ;
-
-
-routerAdmin.get('/products-view' ,admin.adminProductsView) ;
+routerAdmin.post('/product' , admin.productCproduct ) ;
 routerAdmin.get('/home' , admin.productCHome) ;
+routerAdmin.get('/products-view' ,admin.adminProductsView) ;
 routerAdmin.get('/delete-product/:productId' , admin.adminProductDelete);
-routerAdmin.post('/edit-product/step/:productId', admin.adminProductEdit2);
 routerAdmin.get('/edit-product/:productId', admin.adminProductEdit);
-
+routerAdmin.post('/edit-product/step/:productId', admin.adminProductEdit2);
 export { routerAdmin };

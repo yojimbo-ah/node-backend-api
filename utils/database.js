@@ -1,10 +1,33 @@
-import { Sequelize } from "sequelize";
+import {MongoClient} from 'mongodb'
 
+const uri = 'mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
-const sequelize = new Sequelize('node-complete' , 'root' , 'pubgmobile-123?3m' , {
-    host : 'localhost' , dialect : 'mysql'
-})
+const client = new MongoClient(uri) ;
+let db ;
 
+let connectToDatabase = () => {
+    if(db) {
+        return Promise.resolve(db)
+    }
 
+    return client.connect()
+    .then(() => {
+        db = client.db() ;
+        console.log('connected') ;
+        return db ;
+    })
+    .catch(err => {
+        console.log('error cant connect') ;
+        return Promise.reject(err)
+    })
+}
 
-export default sequelize ;
+let getdb = () => {
+    if (db) {
+        return db
+    }
+    throw 'error there is no database'
+}
+
+export {connectToDatabase , getdb}
+

@@ -1,15 +1,23 @@
-import sequelize from "../utils/database.js";
-import { Sequelize , DataTypes } from "sequelize";
+import { connectToDatabase , getdb } from "../utils/database.js"
+import { ObjectId } from "mongodb";
+import { Product } from "./product.js";
+import { User } from "./user.js";
 
-const Order = sequelize.define('order' , {
-    id : {
-        type : DataTypes.INTEGER ,
-        unique : true ,
-        allowNull : false ,
-        autoIncrement : true ,
-        primaryKey : true
+class Order {
+    constructor(id , cart , owenrId) {
+        this.id = id ;
+        this.cart = cart ;
+        this.owenrId = owenrId ;
     }
-})
 
+
+    static getOrder(ID){
+        let db = getdb() ;
+        return db.collection('orders').find({ownerId : ID}).toArray()
+        .then(result => {
+            return result ;
+        })
+    }
+}
 
 export { Order }
