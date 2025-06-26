@@ -1,0 +1,51 @@
+<%- include('../includes/head.ejs')%>
+<link rel="stylesheet" href="/css files/product.css">
+</head>
+    <body>
+        <%- include('../includes/nav.ejs')%>
+        <main class="main-input-list">
+        <h2>
+            add your  information to make an account :
+        </h2>
+        <form action="/signup" method="POST">
+            <div class="small-div">
+                <label class="label-input" for="name">
+                    name :
+                </label>
+                <input class="input-bar" type="text" name="name" id="name" value="<%- oldInputs ? oldInputs.name : '' %>">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="age">
+                    Age :
+                </label>
+                <input class="input-bar" type="number" step="0" name="age" id="age" value="<%- oldInputs ? parseInt(oldInputs.age) : '' %>">
+            </div>
+                <div class="small-div">
+                <label class="label-input" for="email">
+                    E-mail :
+                </label>
+                <input class="input-bar" type="email" name="email" id="email" value="<%- oldInputs ? oldInputs.email : '' %>">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="password" name="password">
+                    add your password :
+                </label>
+                <input class="input-bar" type="password" name="password" id="password" value="<%- oldInputs ? oldInputs.password : '' %>">
+            </div>
+            <div class="small-div">
+                <label class="label-input" for="password" name="confirmpassword">
+                    confirm your password :
+                </label>
+                <input class="input-bar" type="password" name="confirmpassword" id="confirmpassword" value="<%- oldInputs ? oldInputs.confirmpassword : '' %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            </div>
+            <button class="input-button" type="submit">Signup</button>
+        </form>
+    <% if (errorMessage) { %>
+        <p>
+            <%=errorMessage %>
+        </p>
+    <% } %>
+    </main>
+    </body>
+</html>

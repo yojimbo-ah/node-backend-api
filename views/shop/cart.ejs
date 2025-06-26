@@ -15,18 +15,19 @@
             <% cart.products.forEach(elem => { %>
                 <div class="items-div">
                     <p>
-                        name : <%-elem.name %>
+                        name : <%-elem.productId.name %>
                     </p>
                     <p>
-                        price : $ <%-elem.price %>
+                        price : $ <%-elem.productId.price %>
                     </p>
                     <p>
                         qunatity : <%-elem.quantity %>
                     </p>
-                    <form action="/cart/delete/<%-elem._id%>" method="POST">
+                    <form action="/cart/delete/<%-elem.productId._id%>" method="POST">
                         <button type="submit">
                             delete
                         </button>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     </form>
                 </div>
             <% }) %>
@@ -42,6 +43,7 @@
                 <button type="submit">
                     add order
                 </button>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             </form>
         </div>
         <%}%>

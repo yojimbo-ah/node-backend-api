@@ -10,8 +10,8 @@
       <h2>Order ID: <%= order._id %></h2>
       <h2>total price : <%= order.cart.totalPrice%></h2>
       <% order.cart.products.forEach(product => { %>
-        <p><%= product.name %>: <%= product.quantity %></p>
-        <p>descreiption : <%= product.description %></p>
+        <p><%= product.productId.name %>: <%= product.quantity %></p>
+        <p>descreiption : <%= product.productId.description %></p>
       <% }) %>
     <% }) %>
   <% } %>

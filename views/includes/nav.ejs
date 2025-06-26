@@ -3,17 +3,32 @@
         <li class="<%= path === '/shop' ? 'active-input' : '' %> pages-options">
             <a href="/shop">shop</a>
         </li>
+        <% if (!authenticated) { %>
+        <li class="<%= path === '/login' ? 'active-input' : '' %> pages-options login-section">
+            <a href="/login">login</a>
+        </li>
+        <li class="<%= path === '/signup' ? 'active-input' : '' %> pages-options login-section">
+            <a href="/signup">sign up</a>
+        </li>
+        <% } else {%>
         <li class="<%= path === '/cart' ? 'active-input' : '' %> pages-options">
             <a href="/cart">cart</a>
         </li>
+        <li class="<%= path === '/orders' ? 'active-input' : '' %> pages-options">
+            <a href="/orders">orders</a>
         <li class="<%= path === '/admin/products-view' ? 'active-input' : '' %> pages-options">
             <a href="/admin/products-view">admin products</a>
         </li>
         <li class="<%= path === '/admin/home' ? 'active-input' : '' %> pages-options">
             <a href="/admin/home">admin add</a>
         </li>
-        <li class="<%= path === '/admin/edit-product' ? 'active-input' : '' %> pages-options">
-            <a href="/orders">orders</a>
+        <li class="<%= path === '/logout' ? 'active-input' : '' %> pages-options login-section">
+            <form action="/logout" method="POST" style="display: inline;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
         </li>
+        <% } %>
+
     </ul>
 </header>

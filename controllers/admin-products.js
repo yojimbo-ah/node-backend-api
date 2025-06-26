@@ -1,21 +1,24 @@
-import {Product} from '../modules/product.js'
 
+import {Product} from '../modules/product.js'
+import { User } from '../modules/user.js';
 
 // functions of routes admin.js
 
 const productCHome = (req , res , next) => {
+    let authenticated = req.session.loggedIn ;
     res.render('admin/add-product.ejs' , {productTitle : 'products page' 
         , title : 'product page' 
-        , path : '/admin/home'}) ;
+        , path : '/admin/home' 
+        , authenticated : authenticated
+    }) ;
 }
 
 const productCproduct = (req , res , next) =>{
     const reqB = req.body ;
-    console.log(req.user);
-    const userId = req.user._id ;
-    let product = new Product(reqB.title , reqB.description , reqB.price , reqB.image , userId) ;
+    let product = new Product({name : reqB.title , description : reqB.description , price : reqB.price , image : reqB.image , userId : req.session.userId}) ;
     product.save()
     .then(result => {
+        console.log('product has been created');
         res.redirect('/admin/home')
     })
     .catch(err => {
@@ -25,11 +28,11 @@ const productCproduct = (req , res , next) =>{
 }
 
 const adminProductsView = (req , res , next) => {
-
-    Product.fetchAll()
+    Product.find({userId : req.session.userId})
     .then(products => {
+        let authenticated = req.session.loggedIn ;
         res.render('admin/products-view.ejs' 
-        , { products : products  , title : 'admin view' , path : '/admin/products-view'});
+        , { products : products  , title : 'admin view' , path : '/admin/products-view' , authenticated : authenticated});
     })
     .catch(err => {
         console.log(err) ;
@@ -38,10 +41,17 @@ const adminProductsView = (req , res , next) => {
 }
 const adminProductEdit = (req , res , next) =>{
     const ID = req.params.productId ;
-    Product.findById(ID)
+    const userId = req.session.userId ;
+    Product.findOne({_id : ID , userId : userId})
     .then(product => {
-        res.render('admin/edit-product.ejs' , {product : product , title : 'hello' , path : 'wawa'}) ;
-        console.log(product)
+        if (product) {
+            let authenticated = req.session.loggedIn ;
+            res.render('admin/edit-product.ejs' , {product : product , title : 'hello' , path : 'wawa' , authenticated : authenticated}) ;
+            console.log(product)
+        } else {
+            res.redirect('/admin/products-view');
+        }
+
         
     }).catch(err => {
         console.log(err) ;
@@ -55,9 +65,9 @@ const adminProductEdit2 = (req , res , next) => {
         name : reqB.title ,
         description : reqB.description ,
         price : reqB.price ,
-        image : reqB.image
+        image : reqB.image ,
     }
-    Product.update(productId , options)
+    Product.updateOne({_id : productId} , options)
     .then(() => {
         res.redirect('/admin/products-view')
     })
@@ -68,13 +78,22 @@ const adminProductEdit2 = (req , res , next) => {
 
 const adminProductDelete = (req , res , next) => {
     const ID = req.params.productId ;
-    Product.delete(ID)
-    .then(() => {
-        res.redirect('/admin/products-view');
+    const userId = req.session.userId ;
+    Product.findOne({_id : ID , userId : userId})
+    .then(product => {
+        if (product) {
+            product.deleteOne()
+            .then(() => {
+                res.redirect('/admin/products-view')
+            })
+        } else {
+            res.redirect('/admin/products-view')
+        }
     })
     .catch(err => {
-        console.log(err)
+
     })
+
 }
 
 

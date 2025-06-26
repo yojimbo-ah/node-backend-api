@@ -1,13 +1,11 @@
-import { Product } from "../modules/product.js";
-import { getdb } from "../utils/database.js";
-import { ObjectId } from 'mongodb' ;
-import { User } from "../modules/user.js";
-import { Order } from "../modules/order.js";
+import { Product } from "../modules/product.js"
+import { User } from "../modules/user.js"
 
 const productCSHop = (req , res , next) => {
-    Product.fetchAll()
+    Product.find()
     .then(products => {
-        res.render('shop/shop.ejs' , {products : products , title : 'shop' , path : '/shop'})
+        let authenticated = req.session.loggedIn ;
+        res.render('shop/shop.ejs' , {products : products , title : 'shop' , path : '/shop' , authenticated : authenticated})
     })
     .catch(err => {
         console.log(err)
@@ -15,11 +13,15 @@ const productCSHop = (req , res , next) => {
 }
 
 const clientCartGet = (req , res , next) => {
-    let user = req.user ;
-    User.getCart(user.id)
-    .then(cart => {
-        console.log( 'cart :' , cart);
-        res.render('shop/cart.ejs' , {cart : cart , path : '/cart' , title : 'cart' , id : req.user.id}) ;
+    let userId = req.session.userId ;
+    User.findById(userId).
+    then(user => {
+        user.getCart()
+        .then(cart => {
+            let authenticated = req.session.loggedIn ;
+            console.log( 'cart :' , cart);
+            res.render('shop/cart.ejs' , {cart : cart , path : '/cart' , title : 'cart' , id : user._id , authenticated : authenticated}) ;
+        })
     })
     .catch(err => {
         console.log(err)
@@ -31,25 +33,29 @@ const clientCartPost = (req , res , next) => {
         const reqId = req.params.productId ;
         Product.findById(reqId)
         .then(product => {
-            return req.user.addToCart(product)
-        })
-        .then(result => {
-            res.redirect('/cart');
-        })
-        .catch(err => {
-            console.log(err)
+            User.findById(req.session.userId)
+            .then(user => {
+                user.addToCart(product)
+                .then(() => {
+                    res.redirect('/cart');
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
         })
 }
 
 const clientProductView = (req , res , next) => {
-        
-        res.render('shop/product-detail.ejs' , {title : 'product details' , path : '/prodcut-detail'})
+        let authenticated = req.session.loggedIn ;
+        res.render('shop/product-detail.ejs' , {title : 'product details' , path : '/prodcut-detail' , authenticated : authenticated})
 }
 
 const clientIndex = (req , res , next) => {
-    Product.fetchAll()
+    Product.find()
     .then(products => {
-        res.render('shop/index.ejs' , { products : products  , title : 'index page' , path : '/index'});
+        let authenticated = req.session.loggedIn ;
+        res.render('shop/index.ejs' , { products : products  , title : 'index page' , path : '/index' , authenticated : authenticated});
     })
     .catch(err => {
         console.log(err)
@@ -57,14 +63,18 @@ const clientIndex = (req , res , next) => {
 }
 
 const clientOrders = (req , res , next) => {
-    let user = req.user ;
-    Order.getOrder(user.id)
-    .then(orders => {
-        console.log(orders)
-        res.render('shop/orders.ejs' , {title : 'orders page' , path : '/orders' , orders : orders}) ;
+    let userId = req.session.userId ;
+    User.findById(userId)
+    .then(user => {
+    user.getOrders()
+        .then(orders => {
+            let authenticated = req.session.loggedIn ;
+            console.log(orders)
+            res.render('shop/orders.ejs' , {title : 'orders page' , path : '/orders' , orders : orders , authenticated : authenticated}) ;
+        })
     })
     .catch(err => {
-        console.log(result);
+        console.log(err);
     })
 
 }
@@ -72,9 +82,10 @@ const prodcutDetails = (req , res , next) => {
     const productId = req.params.productId ;
     Product.findById(productId)
     .then(product => {
+        let authenticated = req.session.loggedIn ;
         console.log(product)
         res.render('shop/product-detail.ejs' ,
-            {product : product , title : `product detail ` , path : 'product details' })
+            {product : product , title : `product detail ` , path : 'product details'  , authenticated : authenticated})
     })
     .catch(err => {
         console.log(err)
@@ -82,11 +93,17 @@ const prodcutDetails = (req , res , next) => {
 }
 const clientProductCartDelete = (req , res , next) => {
     const deleteId = req.params.ID ;
-    console.log('delete iddddd :' ,  deleteId);
-    let user = req.user ;
-    user.deleteById(deleteId)
-    .then(result => {
-        res.redirect('/cart')
+    let userId = req.session.userId ;
+    User.findById(userId)
+    .then(user => {
+        Product.findById(deleteId)
+        .then(product => {
+            console.log(product)
+            return user.delete(product)
+        })
+        .then((result) => {
+            res.redirect('/cart')
+        })
     })
     .catch(err => {
         console.log(err)
@@ -95,15 +112,19 @@ const clientProductCartDelete = (req , res , next) => {
 }
 
 const createOrder = (req , res , next) => {
-   let user = req.user ;
-   user.addToOrder()
-   .then(result => {
-    console.log(result);
-    res.redirect('/cart');
+   let userId = req.session.userId ;
+   User.findById(userId)
+   .then(user => {
+       user.addToOrder()
+        .then(result => {
+            console.log(result);
+            res.redirect('/cart');
+        })
    })
    .catch(err => {
     console.log(err)
    })
+
 }
 
 const client = {productCSHop , clientCartGet , clientCartPost  

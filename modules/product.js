@@ -1,61 +1,32 @@
-import { connectToDatabase , getdb } from "../utils/database.js"
-import { ObjectId } from "mongodb";
+import mongoose from 'mongoose'
+
+const Schema = mongoose.Schema
 
 
-class Product {
-    constructor(name , description , price , image , userId) {
-        this.name = name ;
-        this.description = description ;
-        this.price = price ; 
-        this.image = image ;
-        this.userId = userId ;
+const ProductSchema = new Schema({
+    name : {
+        type : String ,
+        required : true
+    } ,
+    price : {
+        type : Number ,
+        required : true
+     } ,
+    description : {
+        type : String ,
+        required : true
+    } ,
+    image : {
+        type : String ,
+        required : true 
+    } ,
+    userId : {
+        type : Schema.Types.ObjectId ,
+        required : true ,
+        ref : 'User'
     }
 
-    save() {
-        const db = getdb() ;
-        return db.collection('products').insertOne(this)
-        .then(result => {
-            console.log(result)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
-    static fetchAll () {
-        const db = getdb() ;
-        return db.collection('products').find().toArray()
-        .then(products => {
-            console.log(products) ;
-            return products ;
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
+} , {timestamps : true})
+const Product = mongoose.model('Product' , ProductSchema);
 
-    static findById (productId) {
-        const db = getdb() ;
-        return db.collection('products')
-        .findOne({_id : new ObjectId(productId)})
-        .then(product => {
-            return product ;
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
-
-    static delete (productId) {
-        let db = getdb() ;
-        return db.collection('products')
-        .deleteOne({_id : new ObjectId(productId)})
-    }
-    static update(productId , options) {
-        let db = getdb() ;
-        return db.collection('products')
-        .updateOne({_id : new ObjectId(productId) },{ $set : 
-            {name : options.name , price : options.price ,
-            image : options.image , description : options.description}})
-    }
-}
-export {Product}
+export { Product }

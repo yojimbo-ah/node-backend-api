@@ -36,7 +36,9 @@
                         </div>
                     </div>
                     <div class="product-button-div">
+                        <% if (authenticated) { %>
                         <%- include('../includes/add-product-to-cart.ejs' , {product : product})%>
+                        <% } %>
                         <form action="/product-details/<%=product._id %>" class="button-forms">
                             <button class="product-button" type="submit">
                                 details

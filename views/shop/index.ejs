@@ -25,7 +25,9 @@
                         </div>
                     </div>
                     <div class="product-button-div">
+                        <% if (authenticated) { %>
                         <%- include('../includes/add-product-to-cart.ejs' , {product : product})%>
+                        <% } %>
                     </div>
                 </div>
             

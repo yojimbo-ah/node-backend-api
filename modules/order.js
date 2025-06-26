@@ -1,23 +1,32 @@
-import { connectToDatabase , getdb } from "../utils/database.js"
-import { ObjectId } from "mongodb";
-import { Product } from "./product.js";
-import { User } from "./user.js";
+import mongoose from 'mongoose' ;
 
-class Order {
-    constructor(id , cart , owenrId) {
-        this.id = id ;
-        this.cart = cart ;
-        this.owenrId = owenrId ;
+const Schema = mongoose.Schema ;
+
+const OrderSchema = new Schema ({
+    userId : {
+        type : Schema.Types.ObjectId ,
+        required : true ,
+        ref : 'User'
+    } , 
+    cart : {
+        totalPrice : {
+            type : Schema.Types.Number ,
+            required : true 
+        } ,
+        products : [{
+            productId : {
+                type : Schema.Types.ObjectId ,
+                required : true , 
+                ref : 'Product'
+            } ,
+            quantity : {
+                type : Number ,
+                required : true 
+            }
+        }]
     }
+})
 
 
-    static getOrder(ID){
-        let db = getdb() ;
-        return db.collection('orders').find({ownerId : ID}).toArray()
-        .then(result => {
-            return result ;
-        })
-    }
-}
-
-export { Order }
+const Order = mongoose.model('Order' , OrderSchema) ;
+export {Order}

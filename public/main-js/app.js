@@ -1,9 +1,13 @@
 import http from 'http' ;
 import express from 'express' ;
+import session from 'express-session';
 import bodyParser from 'body-parser' ;
 import path from 'path' ;
-
-import {  connectToDatabase } from '../../utils/database.js';
+import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo';
+import csurf from 'csurf';
+import flash from 'connect-flash'
+import { Resend } from 'resend';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -15,17 +19,22 @@ const __dirname = dirname(__filename);
 // imoported middleware functions
 import { routerAdmin  } from '../../routes/admin.js' ;
 import { routerShop } from '../../routes/shop.js';
+import { authRouter } from '../../routes/auth.js';
 
 // modules 
-import { User } from '../../modules/user.js';
-import { Product } from '../../modules/product.js';
-
+import { Product } from "../../modules/product.js"
+import { User } from "../../modules/user.js"
 // imported controller functions 
 import { error404 } from '../../controllers/error404.js';
 
 
 const app = express() ;
+let store = MongoStore.create({
+    mongoUrl : 'mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0',
+    collectionName : 'sessions'
+})
 
+const csrfProtection = csurf() ;
 
 
 app.set('view engine' , 'ejs');
@@ -34,29 +43,28 @@ app.set('views' , 'views')
 
 app.use(bodyParser.urlencoded({extended : false})) ;
 app.use(express.static(path.join(__dirname , '../../public'))) ;
+app.use(session({
+    secret : 'my secret session',
+    resave : false ,
+    saveUninitialized : false ,
+    store : store
+}))
+app.use(flash())
 
-
-
+app.use(csrfProtection)
 app.use((req , res , next) => {
-    User.findById('6856dbbf650c9b93e9bcd612')
-    .then(user => {
-        let user1 = new User(user.name , user.email , user.age , user.cart , user._id)
-        req.user = user1
-        next()
-    })
-    .catch(err => {
-        console.log(err)
-    })
-} )
-    
+    res.locals.csrfToken = req.csrfToken();
+    next();
 
+})
+app.use( authRouter);
 app.use('/admin' , routerAdmin ) ;
 app.use('/' , routerShop ) ;
 
 
-connectToDatabase()
-.then(client => {
-    console.log(client)
+mongoose.connect('mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0')
+.then(result => {
+    console.log(result)
     app.listen(3000)
 })
 .catch(err => {
