@@ -24,14 +24,9 @@
             <button class="input-button" type="submit">Login</button>
         </form>
         <a href="/reset">reset password</a>
-    <% if (errorMessage) { %>
+    <% if (errors) { %>
         <p>
-            <%= errorMessage %>
-        </p>
-    <% } %>
-    <% if (successMessage) { %>
-        <p>
-            <%= successMessage %>
+            <%= errors %>
         </p>
     <% } %>
     </main>

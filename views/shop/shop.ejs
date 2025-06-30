@@ -10,6 +10,37 @@
         .product-button{
             display: inline-block;
         }
+        .pagination {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .pagination a{
+            text-decoration: none;
+            color: black;
+            margin: 5px;
+            border: solid;
+            border-color: black;
+            padding: 10px;
+            border-radius:10px;
+            transition: 0.3s;
+        }
+        .pagination a:hover {
+            transition: 0.3s;
+            border-radius: 20px;
+            padding: 15px;
+            border-color: grey;
+            color: grey;
+        }
+        .pagination a.current-page {
+            border-color: black;
+            color : white ;
+            border-radius: 20px;
+            padding: 15px;
+            background-color: black ;
+            pointer-events: none;
+
+        }
+
     </style>
 </head>
 <body>
@@ -25,7 +56,7 @@
                         <%=product.name%>
                     </header>
                     <div class="product-image-div">
-                        <img class="product-image-inp" src="<%=product.image%>" alt="">
+                        <img class="product-image-inp" src="/<%=product.image%>" alt="">
                     </div>
                     <div class="product-price-dis">
                         <div class="product-price-div">
@@ -53,6 +84,20 @@
                 <h1>There are no products currently!</h1>
                 <% }%>
     </main>
+    <section class="pagination" >
+        <% if (page !== 1) { %>
+            <a href="/shop?page=1">1</a>
+            <a href="/shop?page=<%= previousPage %>">previous page</a>
+        <% } %>
+            <a class="current-page" href="/shop?page=<%= page %>"><%= page %></a>
+        <% if (nextPageExist) { %>
+            <a href="/shop?page=<%= nextPage %>">next page</a>
+        <% } %>
+        <% if (page !== lastPage) { %>
+            <a href="/shop?page=<%= lastPage %>"><%= lastPage %></a>
+        <% } %>
+        
+    </section>
  
 </body>
 </html>

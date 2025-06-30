@@ -18,6 +18,7 @@ routerShop.get('/cart' , isAuth ,client.clientCartGet) ;
 routerShop.post('/cart/delete/:ID' , isAuth , client.clientProductCartDelete) ;
 routerShop.post('/order/check' , isAuth ,client.createOrder) ;
 routerShop.get('/orders' , isAuth ,client.clientOrders) ;
+routerShop.get('/orders/invoice/:orderId' , client.getInvoice)
 
 /*
 routerShop.get('/product-details/:productId' , client.prodcutDetails) ;

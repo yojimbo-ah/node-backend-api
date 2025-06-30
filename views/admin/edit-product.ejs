@@ -9,18 +9,18 @@
         <h2>
             You can edit your product from here :
         </h2>
-        <form action="/admin/edit-product/step/<%= product._id%>" method="POST">
+        <form action="/admin/edit-product/step/<%- product._id ? product._id : ''  %>" method="POST" enctype="multipart/form-data">
             <div class="small-div">
-                <label class="label-input" for="title">
+                <label class="label-input" for="name">
                     Title : 
                 </label>
-                <input class="input-bar" type="text" name="title" id="title" value="<%= product.name%>">
+                <input class="input-bar" type="text" name="name" id="name" value="<%= product.name%>">
             </div>
             <div class="small-div">
                 <label class="label-input" for="image" name="image">
-                    Add image url : 
+                    image : 
                 </label>
-                <input class="input-bar" type="text" name="image" id="image" value="<%= product.image %>">
+                <input class="input-bar" type="file" name="image" id="image">
             </div>
             <div class="small-div">
                 <label class="label-input" for="price" name="price">
@@ -34,9 +34,14 @@
                 </label>
                 <input class="input-bar" type="text" name="description" id="description" value="<%= product.description %>">
             </div>
-            <button class="input-button" type="submit">edit product</button>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="input-button" type="submit">edit product</button>
         </form>
+        <% if (errors) { %>
+            <p>
+                <%= errors %>
+            </p>
+        <% } %>
     </main>
  
 </body>

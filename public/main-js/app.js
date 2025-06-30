@@ -7,7 +7,8 @@ import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import csurf from 'csurf';
 import flash from 'connect-flash'
-import { Resend } from 'resend';
+import multer from 'multer';
+
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -25,7 +26,7 @@ import { authRouter } from '../../routes/auth.js';
 import { Product } from "../../modules/product.js"
 import { User } from "../../modules/user.js"
 // imported controller functions 
-import { error404 } from '../../controllers/error404.js';
+import { error404, error500 } from '../../controllers/error404.js';
 
 
 const app = express() ;
@@ -33,6 +34,21 @@ let store = MongoStore.create({
     mongoUrl : 'mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0',
     collectionName : 'sessions'
 })
+const fileStorage = multer.diskStorage({
+    destination : (req , file , cb) => {
+        cb(null , 'images') 
+    } ,
+    filename : (req , file , cb) => {
+        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname);
+    }
+})
+const fileFilter = (req , file , cb) => {
+    if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null , true)
+    } else {
+        cb(null , false)
+    }
+}
 
 const csrfProtection = csurf() ;
 
@@ -40,9 +56,13 @@ const csrfProtection = csurf() ;
 app.set('view engine' , 'ejs');
 app.set('views' , 'views')
 
-
 app.use(bodyParser.urlencoded({extended : false})) ;
+app.use(multer({storage : fileStorage , fileFilter : fileFilter}).single('image'))
+
 app.use(express.static(path.join(__dirname , '../../public'))) ;
+app.use('/images', express.static(path.join(__dirname, '../../images')));
+
+
 app.use(session({
     secret : 'my secret session',
     resave : false ,
@@ -51,15 +71,37 @@ app.use(session({
 }))
 app.use(flash())
 
+app.use((req , res, next) => {
+    if(!req.session.userId) {
+        return next()
+    } else {
+        User.findOne({_id : req.session.userId})
+        .then(user => {
+            if (!user) {
+                return next()
+            } else {
+                req.user = user ; 
+                next()
+            }
+        })
+        .catch(err => {
+            next(new Error(err))
+        })
+    }
+})
 app.use(csrfProtection)
 app.use((req , res , next) => {
     res.locals.csrfToken = req.csrfToken();
     next();
 
 })
-app.use( authRouter);
+app.use(authRouter);
 app.use('/admin' , routerAdmin ) ;
 app.use('/' , routerShop ) ;
+app.use(error404)
+app.use((error , req , res , next) => {
+    error500(error , req , res , next)
+})
 
 
 mongoose.connect('mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0')

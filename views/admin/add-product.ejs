@@ -9,34 +9,37 @@
         <h2>
             You can add your product from here :
         </h2>
-        <form action="/admin/product" method="POST">
+        <form action="/admin/product" method="POST" enctype="multipart/form-data">
             <div class="small-div">
-                <label class="label-input" for="title">
+                <label class="label-input" for="name">
                     Title :
                 </label>
-                <input class="input-bar" type="text" name="title" id="title">
+                <input class="input-bar" type="text" name="name" id="name" value="<%- oldInputs ? oldInputs.name : '' %>">
             </div>
             <div class="small-div">
                 <label class="label-input" for="image" name="image">
-                    Add image url :
+                    Image :
                 </label>
-                <input class="input-bar" type="text" name="image" id="image">
+                <input class="input-bar" type="file" name="image" id="image">
             </div>
             <div class="small-div">
                 <label class="label-input" for="price" name="price">
                     add product price :
                 </label>
-                <input class="input-bar" type="number" step="0.01" name="price" id="price">
+                <input class="input-bar" type="number" step="0.01" name="price" id="price" value="<%- oldInputs ? oldInputs.price : 0  %>">
             </div>
             <div class="small-div">
                 <label class="label-input" for="description" name="description">
                     Add product description :
                 </label>
-                <input class="input-bar" type="text" name="description" id="description">
+                <input class="input-bar" type="text" name="description" id="description" value="<%- oldInputs ? oldInputs.description : '' %>">
             </div>
             <button class="input-button" type="submit">add product</button>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         </form>
+        <% if (errors) { %>
+            <%= errors %>
+        <% } %>
     </main>
  
 </body>

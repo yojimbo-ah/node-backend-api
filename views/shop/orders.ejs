@@ -13,6 +13,7 @@
         <p><%= product.productId.name %>: <%= product.quantity %></p>
         <p>descreiption : <%= product.productId.description %></p>
       <% }) %>
+      <a href="/orders/invoice/<%=order._id%>">get order details in pdf format</a>
     <% }) %>
   <% } %>
 

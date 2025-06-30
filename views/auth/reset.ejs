@@ -17,14 +17,9 @@
             </div>
             <button class="input-button" type="submit">reset</button>
         </form>
-    <% if (errorMessage) { %>
+    <% if (errors) { %>
         <p>
-            <%= errorMessage %>
-        </p>
-    <% } %>
-    <% if (successMessage) { %>
-        <p>
-            <%= successMessage %>
+            <%= errors %>
         </p>
     <% } %>
     </main>
