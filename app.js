@@ -37,8 +37,7 @@ import { User } from "./modules/user.js"
 import { error404, error500 } from './controllers/error404.js';
 console.log(process.env.NODE_ENV)
 
-const priveteKey = fs.readFileSync('server.key');
-const certificate = fs.readFileSync('server.cert')
+
 
 
 const app = express() ;
@@ -122,7 +121,7 @@ app.use((error , req , res , next) => {
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.echqncm.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority&appName=Cluster0`)
 .then(result => {
     console.log('connected')
-    https.createServer( {key : priveteKey , cert : certificate}, app).listen(process.env.PORT || 3000)
+    app.listen(process.env.PORT || 3000)
 })
 .catch(err => {
     console.log(err)
