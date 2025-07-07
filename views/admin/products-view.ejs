@@ -13,7 +13,7 @@
         <div class="all-products-div">
             <%if (products.length > 0 ) { %>
                 <%products.forEach((prod) => { %>
-            <article>
+            <article class="product-article-<%=prod._id%>">
                 <div class="product-div">
                     <header class="product-name">
                         <%=prod.name%>
@@ -36,12 +36,10 @@
                             </button>
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         </form>
-                        <form action="/admin/delete-product/<%= prod._id %>"  class="button-forms">
-                            <button type="submit" class="product-button">
+                            <button data-productid="<%= prod._id %>" type="button" class="product-button delete-button">
                                 delete
                             </button>
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        </form>
                     </div>
                 </div>
             
@@ -53,4 +51,5 @@
     </main>
  
 </body>
+<script src="/main-js/admin.js"></script>
 </html>

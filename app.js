@@ -8,30 +8,42 @@ import MongoStore from 'connect-mongo';
 import csurf from 'csurf';
 import flash from 'connect-flash'
 import multer from 'multer';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import compression from 'compression';
+import morgan from 'morgan';
+import fs from 'fs'
+import https from 'https'
+dotenv.config()
 
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
 
 // Get the equivalent of __filename and __dirname
 const __filename = fileURLToPath(import.meta.url);  // Convert import.meta.url to file path
 const __dirname = dirname(__filename);
 
 // imoported middleware functions
-import { routerAdmin  } from '../../routes/admin.js' ;
-import { routerShop } from '../../routes/shop.js';
-import { authRouter } from '../../routes/auth.js';
+import { routerAdmin  } from './routes/admin.js' ;
+import { routerShop } from './routes/shop.js';
+import { authRouter } from './routes/auth.js';
 
 // modules 
-import { Product } from "../../modules/product.js"
-import { User } from "../../modules/user.js"
+import { Product } from "./modules/product.js"
+import { User } from "./modules/user.js"
 // imported controller functions 
-import { error404, error500 } from '../../controllers/error404.js';
+import { error404, error500 } from './controllers/error404.js';
+console.log(process.env.NODE_ENV)
+
+const priveteKey = fs.readFileSync('server.key');
+const certificate = fs.readFileSync('server.cert')
 
 
 const app = express() ;
 let store = MongoStore.create({
-    mongoUrl : 'mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0',
+    mongoUrl : `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0`,
     collectionName : 'sessions'
 })
 const fileStorage = multer.diskStorage({
@@ -62,7 +74,10 @@ app.use(multer({storage : fileStorage , fileFilter : fileFilter}).single('image'
 app.use(express.static(path.join(__dirname , '../../public'))) ;
 app.use('/images', express.static(path.join(__dirname, '../../images')));
 
-
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'..', '..' , 'access.log') , {flags : 'a'} )
+app.use(helmet())
+app.use(compression())
+app.use(morgan('combined' , {stream : accessLogStream}))
 app.use(session({
     secret : 'my secret session',
     resave : false ,
@@ -104,10 +119,10 @@ app.use((error , req , res , next) => {
 })
 
 
-mongoose.connect('mongodb+srv://abbadahmed:kKAls1NszXsiKXVR@cluster0.echqncm.mongodb.net/shop?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.echqncm.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority&appName=Cluster0`)
 .then(result => {
-    console.log(result)
-    app.listen(3000)
+    console.log('connected')
+    https.createServer( {key : priveteKey , cert : certificate}, app).listen(process.env.PORT || 3000)
 })
 .catch(err => {
     console.log(err)

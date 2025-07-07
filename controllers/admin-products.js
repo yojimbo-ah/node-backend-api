@@ -177,11 +177,11 @@ const adminProductDelete = (req , res , next) => {
             .then(() => {
                 product.deleteOne()
                 .then(() => {
-                    res.redirect('/admin/products-view')
+                    res.status(200).json({nessage : 'product has been deleted'})
                 })
             })
             .catch(err => {
-                return next(err)
+                res.status(500).json({message : 'error cant delete product'})
             })
 
         } else {

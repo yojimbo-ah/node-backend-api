@@ -31,7 +31,7 @@ routerAdmin.post('/product' , isAuth ,
 , admin.productCproduct ) ;
 routerAdmin.get('/home' , admin.productCHome) ;
 routerAdmin.get('/products-view' , isAuth , admin.adminProductsView) ;
-routerAdmin.get('/delete-product/:productId' , isAuth , admin.adminProductDelete);
+routerAdmin.delete('/delete-product/:productId' , isAuth , admin.adminProductDelete);
 routerAdmin.get('/edit-product/:productId',isAuth  , admin.adminProductEdit);
 routerAdmin.post('/edit-product/step/:productId', isAuth ,  
     [

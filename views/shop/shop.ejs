@@ -80,11 +80,12 @@
             
             </article>
             <% }) %>
+
             <% } else { %>
                 <h1>There are no products currently!</h1>
                 <% }%>
     </main>
-    <section class="pagination" >
+        <section class="pagination" >
         <% if (page !== 1) { %>
             <a href="/shop?page=1">1</a>
             <a href="/shop?page=<%= previousPage %>">previous page</a>
