@@ -3,13 +3,15 @@ import bcrypt from 'bcrypt' ;
 import nodemailer from 'nodemailer' ;
 import crypto from 'crypto'; 
 import { validationResult } from "express-validator";
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
     service : 'gmail' ,
     auth : {
-        user : `${process.eventNames.EMAIL}` ,
-        pass : `${process.env.EMAIL_CODE}`
+        user : `abbad.ahmed.gg@gmail.com` ,
+        pass : `ilvvczgmcalhxqvk`
     }
 })
 const getLogin = (req , res , next ) => {
@@ -115,6 +117,8 @@ const getReset = (req , res , next) => {
     res.render('auth/reset.ejs' , {title : 'password reset' , path : '/reset' , authenticated : false , errors : null })
 }
 const postReset = (req , res , next) => {
+    console.log(process.env.EMAIL)
+    console.log(process.env.EMAIL_CODE);
     const errors = validationResult(req) ;
     if (!errors.isEmpty()) {
         res.render('auth/reset.ejs' , {title : 'password reset' , path : '/reset' , authenticated : false , oldInputs : req.body , errors : errors.array()[0].msg})
@@ -137,7 +141,7 @@ const postReset = (req , res , next) => {
                         subject : 'reset account' ,
                         html : `
                         <p>this is a request for reseting your email password</P>
-                        <p>click here to reset it : <a href="${process.env.URL}/reset/${token}">click me </a>"
+                        <p>click here to reset it : <a href="${process.env.URL}/reset/${token}">click me </a></p>"
                         `
                     })
                     req.flash('success' , 'reset email was sent to your inbox')
