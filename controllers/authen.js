@@ -137,7 +137,7 @@ const postReset = (req , res , next) => {
                         subject : 'reset account' ,
                         html : `
                         <p>this is a request for reseting your email password</P>
-                        <p>click here to reset it : <a href="http://localhost:3000/reset/${token}">click me </a>"
+                        <p>click here to reset it : <a href="${process.env.URL}/reset/${token}">click me </a>"
                         `
                     })
                     req.flash('success' , 'reset email was sent to your inbox')
