@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt' ;
 import nodemailer from 'nodemailer' ;
 import crypto from 'crypto'; 
 import { validationResult } from "express-validator";
-import { error } from "console";
+
 
 const transporter = nodemailer.createTransport({
     service : 'gmail' ,
