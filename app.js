@@ -111,6 +111,7 @@ app.use((req , res , next) => {
 })
 app.use(authRouter);
 app.use('/admin' , routerAdmin ) ;
+app.get('/favicon.ico', (req, res) => res.sendStatus(204)); 
 app.use('/' , routerShop ) ;
 app.use(error404)
 app.use((error , req , res , next) => {
