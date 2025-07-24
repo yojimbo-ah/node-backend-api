@@ -8,8 +8,8 @@ import { error } from "console";
 const transporter = nodemailer.createTransport({
     service : 'gmail' ,
     auth : {
-        user : 'abbad.ahmed.gg@gmail.com' ,
-        pass : 'gjnk auht okyb sclv'
+        user : `${process.eventNames.EMAIL}` ,
+        pass : `${process.env.EMAIL_CODE}`
     }
 })
 const getLogin = (req , res , next ) => {
@@ -166,7 +166,7 @@ const getResetToken = (req , res , next ) => {
             if (date > now) {
                 console.log('changing')
                 req.flash('success' , 'you can change your password on this page')
-                res.render('auth/passwordReset.ejs' , {title : 'password confirmation' , path : '/confirmpassword ' , authenticated : false , 
+                res.render('auth/passwordReset.ejs' , {title : 'password confirmation' , path : '/confirmpassword' , authenticated : false , 
                     errorMessage : req.errorMessage , successMessage : req.successMessage , userId : user._id , token : resetToken , errors : null
                 })
             } else {
