@@ -141,7 +141,7 @@ const postReset = (req , res , next) => {
                         `
                     })
                     req.flash('success' , 'reset email was sent to your inbox')
-                    res.redirect('/reset');
+                    res.redirect('/');
                 })
                 .catch(err => {
                     err.httpStatusCode = 500 ;
